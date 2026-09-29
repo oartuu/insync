@@ -1,69 +1,165 @@
-import Image from "next/image";
+'use client';
+import { Button } from "@/components/ui/button";
+import { Card, CardAction, CardContent, CardHeader } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTrigger } from "@/components/ui/dialog";
+import { ArrowLeft, ArrowRight, Plus } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+
+type Group = {
+  id: string;
+  authorId: string;
+  planId: any;
+  name: string;
+  paymentStatus: any;
+  createdAt: string;
+  members: Member[];
+}
+
+type Member = {
+  id: string;
+  groupId: string;
+  userId: string;
+  accessLevel: string;
+  status: string;
+  function: string[];
+  user: User;
+}
+
+type User = {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+}
+
+type Inputs ={
+  name: string
+}
 
 export default function Home() {
+
+  const [groups, setGroups] = useState<Group[]>([]);
+ const {
+   register,
+   handleSubmit,
+   formState: { errors },
+ } = useForm<Inputs>();
+ 
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const token = localStorage.getItem("token");
+      const res = await fetch("http://localhost:5000/group/list", {
+        method: "GET",
+
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        }
+
+        });
+      const data = await res.json();
+      console.log(data);
+      setGroups(data);
+    };
+    fetchPosts();
+  }, []);
+
+   const onSubmit = async (formData: Inputs) => {
+     try {
+      const token = localStorage.getItem("token")
+       const response = await fetch("http://localhost:5000/group/create", {
+         method: "POST",
+
+         headers: {
+           "Content-Type": "application/json",
+           Authorization: `Bearer ${token}`,
+         },
+
+         body: JSON.stringify({
+           name: formData.name,
+         }),
+       });
+
+
+       if (!response.ok) {
+         return;
+       }
+
+       window.location.reload()
+     } catch (error: any) {
+       console.log(error.message);
+     }
+   };
+
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div className="bg-zinc-900 min-h-dvh flex flex-col justify-start">
+      <div className="bg-red-800 flex justify-between w-full items-center p-3 shadow-2xl">
+        <p className="text-zinc-50 font-extrabold">InSync</p>
+
+        <Dialog>
+          <DialogTrigger
+            render={
+              <Button variant={"secondary"}>
+                Novo grupo <Plus />{" "}
+              </Button>
+            }
+          />
+
+          <DialogContent>
+            <DialogHeader>Criar Grupo</DialogHeader>
+            <div className="flex flex-col gap-2 p-4 rounded-xl">
+
+              <div className="flex flex-col gap-2">
+                <label htmlFor="name">nome *</label>
+                <input
+                  className="py-2 px-3 border border-gray-300 rounded-md focus:outline-none "
+                  type="email"
+                  {...register("name", { required: true })}
+                  placeholder="Insira o nome do grupo"
+                />
+                {errors.name && (
+                  <span className="ml-2 text-xs font-light text-red-600 dark:text-red-400">
+                    Este campo é obrigatório
+                  </span>
+                )}
+              </div>
+
+              <Button
+                onClick={handleSubmit(onSubmit)}
+                className="justify-between"
+                variant="default"
+                size="lg"
+              >
+                Criar <ArrowRight />
+              </Button>
+
+             
+            </div>
+          </DialogContent>
+        </Dialog>
+      </div>
+
+      <div className="p-4 flex flex-col gap-4">
+        {groups.map((g) => (
+          <Card
+            key={g.id}
+            className="bg-linear-to-br from-zinc-900 to-zinc-800 text-zinc-50 border border-zinc-600"
           >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+            <CardHeader>{g.name}</CardHeader>
+            <CardContent>
+              <p>Membros: {g.members.length}</p>
+              {/* <p>proximo evento: group.nextEvent</p> */}
+              <CardAction className="self-end">
+                <a href={`/group/${g.id}`}>
+                <Button>Mais Detalhes <ArrowRight/> </Button>
+                </a>
+              </CardAction>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
     </div>
   );
 }
