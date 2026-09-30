@@ -1,21 +1,16 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardHeader,
-} from "@/components/ui/card";
+
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Item, ItemActions, ItemContent, ItemDescription, ItemTitle } from "@/components/ui/item";
-import { ArrowLeft, ArrowRight, Clipboard, Plus } from "lucide-react";
+import { Item, ItemActions, ItemContent, ItemTitle } from "@/components/ui/item";
+import {  Clipboard, Plus } from "lucide-react";
 import { use, useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+
 
 type Group = {
   id: string;
@@ -44,10 +39,6 @@ type User = {
   phone: string;
 };
 
-type Inputs = {
-  name: string;
-};
-
 
 interface PageProps {
   params: Promise<{
@@ -59,11 +50,6 @@ export default function Home({params}:PageProps) {
   const {id} = use(params)
   const [group, setGroup] = useState<Group>();
   const [copied, setCopied] =useState(false)
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<Inputs>();
 
   const link = `http://localhost:3000/group/join/${group?.id}`;
 
@@ -102,31 +88,6 @@ export default function Home({params}:PageProps) {
     fetchPosts();
   }, []);
 
-  const onSubmit = async (formData: Inputs) => {
-    try {
-      const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:5000/group/create", {
-        method: "POST",
-
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-
-        body: JSON.stringify({
-          name: formData.name,
-        }),
-      });
-
-      if (!response.ok) {
-        return;
-      }
-
-      window.location.reload();
-    } catch (error: any) {
-      console.log(error.message);
-    }
-  };
 
   return (
     <div className="bg-zinc-900 min-h-dvh flex flex-col justify-start">
@@ -143,12 +104,9 @@ export default function Home({params}:PageProps) {
           />
 
           <DialogContent>
-            <DialogHeader>convidar membro</DialogHeader>
+            <DialogHeader>Link de convite:</DialogHeader>
             <div className="flex flex-col gap-2 p-4 rounded-xl">
-              <h1 className="text-2xl font-bold">Login</h1>
-
               <div className="flex flex-col gap-2">
-                <label htmlFor="name">Link de convite:</label>
                 <input
                   className="py-2 px-3 border border-gray-300 rounded-md focus:outline-none "
                   type="text"
@@ -172,7 +130,6 @@ export default function Home({params}:PageProps) {
 
       <div className="p-4 flex flex-col gap-4">
         {group?.members.map((m) => (
-
           <Item key={m.id} variant="outline" className="border-zinc-700">
             <ItemContent>
               <ItemTitle className="text-zinc-50">{m.user.name}</ItemTitle>

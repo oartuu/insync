@@ -5,6 +5,15 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+
+
+ --color-main-background:#10131E;
+--color-dark-background:#0B0E18;
+--color-card-background:#1C1F2A;
+--color-brand:#DC2626;
+--color-text-red:#AC8884;
+
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-sans);
