@@ -1,107 +1,97 @@
-'use client';
+"use client";
+import EventCard from "@/components/eventCard";
 import { Button } from "@/components/ui/button";
-import { Card, CardAction, CardContent, CardHeader } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogHeader, DialogTrigger } from "@/components/ui/dialog";
-import { Item, ItemActions, ItemContent, ItemDescription, ItemMedia, ItemTitle } from "@/components/ui/item";
-import {  ArrowRight, Bell, Calendar, CalendarPlus, EllipsisVertical, Plus, User, Users } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemMedia,
+  ItemTitle,
+} from "@/components/ui/item";
+import { User as UserType } from "@/types/user";
+
+import {
+  ArrowRight,
+  Bell,
+  CalendarPlus,
+  EllipsisVertical,
+  User,
+  Users,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
-type Group = {
-  id: string;
-  authorId: string;
-  planId: any;
+type Inputs = {
   name: string;
-  paymentStatus: any;
-  createdAt: string;
-  members: Member[];
-}
-
-type Member = {
-  id: string;
-  groupId: string;
-  userId: string;
-  accessLevel: string;
-  status: string;
-  function: string[];
-  user: User;
-}
-
-type User = {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-}
-
-type Inputs ={
-  name: string
-}
+};
 
 export default function Home() {
+  const [userData, setUserData] = useState<UserType>();
+  const router = useRouter();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Inputs>();
 
-  const [groups, setGroups] = useState<Group[]>([]);
-  const router = useRouter()
- const {
-   register,
-   handleSubmit,
-   formState: { errors },
- } = useForm<Inputs>();
- 
   useEffect(() => {
     const fetchPosts = async () => {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:5000/group/list", {
+      const res = await fetch("http://localhost:5000/user/data", {
         method: "GET",
 
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
-        }
-
-        });
+        },
+      });
       const data = await res.json();
 
-
-      if (!res.ok){
-        router.push("/auth/login")
+      if (!res.ok) {
+        router.push("/auth/login");
       }
 
       console.log(data);
-      setGroups(data);
+      setUserData(data);
     };
     fetchPosts();
   }, []);
 
-   const onSubmit = async (formData: Inputs) => {
-     try {
-      const token = localStorage.getItem("token")
-       const response = await fetch("http://localhost:5000/group/create", {
-         method: "POST",
+  const onSubmit = async (formData: Inputs) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch("http://localhost:5000/group/create", {
+        method: "POST",
 
-         headers: {
-           "Content-Type": "application/json",
-           Authorization: `Bearer ${token}`,
-         },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
 
-         body: JSON.stringify({
-           name: formData.name,
-         }),
-       });
+        body: JSON.stringify({
+          name: formData.name,
+        }),
+      });
 
+      if (!response.ok) {
+        return;
+      }
 
-       if (!response.ok) {
-         return;
-       }
+      window.location.reload();
+    } catch (error: any) {
+      console.log(error.message);
+    }
+  };
 
-       window.location.reload()
-     } catch (error: any) {
-       console.log(error.message);
-     }
-   };
-
-
+ 
   return (
     <div className="bg-main-background min-h-dvh flex flex-col justify-start">
       <div className=" flex justify-between w-full items-center p-3 shadow-md">
@@ -116,10 +106,13 @@ export default function Home() {
       </div>
 
       <div className="p-4">
-        <h1 className="text-zinc-50 text-2xl font-bold">Olá, Artu</h1>
+        <h1 className="text-zinc-50 text-2xl font-bold">
+          Olá, {userData?.name}
+        </h1>
         <p className="text-text-red text-sm">
           Pronto para afinar a passagem de som?
         </p>
+        <EventCard nextEvent={userData?.nextEvent[0]} />
       </div>
 
       <div className="p-4 flex flex-col gap-4">
@@ -240,7 +233,7 @@ export default function Home() {
                   <label htmlFor="group">Grupo *</label>
                   <input
                     className="py-2 px-3 bg-dark-background rounded-xs focus:outline-none placeholder:text-zinc-300"
-                    type="email"
+                    type="select"
                     {...register("name", { required: true })}
                     placeholder="Selecione o Grupo"
                   />
@@ -267,10 +260,10 @@ export default function Home() {
         <div className="flex items-center gap-2">
           <p className="text-text-red">Meus Grupos</p>
           <div className="rounded-full bg-card-background py-1 px-3 text-text-red">
-            {groups.length}
+            {userData?.groups.length}
           </div>
         </div>
-        {groups.map((g) => (
+        {userData?.groups.map((g) => (
           <a key={g.id} href={`/group/${g.id}`}>
             <Item className="bg-card-background text-zinc-50">
               <ItemMedia>
@@ -283,6 +276,11 @@ export default function Home() {
                 <ItemDescription className="text-text-red">
                   {g.members.length}{" "}
                   {g.members.length > 1 ? "membros" : "membro"}
+                  {g.events.length > 0
+                    ? ` • ${g.events.length} ${
+                        g.events.length > 1 ? "eventos" : "evento"
+                      }`
+                    : ""}
                 </ItemDescription>
               </ItemContent>
               <ItemActions>
