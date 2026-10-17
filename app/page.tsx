@@ -1,6 +1,7 @@
 "use client";
 import EventCard from "@/components/eventCard";
 import FooterNav from "@/components/footerNav";
+import TopMenu from "@/components/topMenu";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -95,16 +96,9 @@ export default function Home() {
  
   return (
     <div className="bg-main-background min-h-dvh flex flex-col justify-start">
-      <div className=" flex justify-between w-full items-center p-3 bg-dark-background shadow-md">
-        <img src="/logo.svg" alt="inSync logo" />
+      
+    <TopMenu/>
 
-        <div className="flex text-zinc-50 items-center gap-3">
-          <Bell />
-          <div className="bg-brand hover:bg-brand/60 hover:text-zinc-200 hover:cursor-pointer transition-all rounded-md p-2">
-            <User />
-          </div>
-        </div>
-      </div>
 
       <div className="flex flex-col flex-1">
         {" "}
