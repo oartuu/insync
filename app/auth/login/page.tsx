@@ -49,14 +49,14 @@ function page() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-zinc-900">
-      <div className="flex flex-col gap-2 bg-zinc-200 w-2/3 p-4 rounded-xl">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-dark-background">
+      <div className="flex flex-col gap-2 text-zinc-50 w-2/3 p-4 rounded-xl bg-card-background">
         <h1 className="text-2xl font-bold">Login</h1>
 
         <div className="flex flex-col gap-2">
           <label htmlFor="email">Email *</label>
           <input
-            className="py-2 px-3 border border-gray-300 rounded-md focus:outline-none "
+            className="py-2 px-3 bg-dark-background rounded-xs focus:outline-none placeholder:text-zinc-300"
             type="email"
             {...register("email", { required: true })}
             placeholder="Insira o seu Email"
@@ -70,7 +70,7 @@ function page() {
         <div className="flex flex-col gap-2">
           <label htmlFor="email">Senha *</label>
           <input
-            className="py-2 px-3 border border-gray-300 rounded-md focus:outline-none "
+            className="py-2 px-3 bg-dark-background rounded-xs focus:outline-none placeholder:text-zinc-300"
             type="password"
             {...register("password", { required: true })}
             placeholder="Insira o sua Senha"
@@ -84,18 +84,18 @@ function page() {
 
         <Button
           onClick={handleSubmit(onSubmit)}
-          className="justify-between"
+          className="justify-between bg-brand hover:bg-brand/60 transition-all "
           variant="default"
           size="lg"
         >
           Entrar <ArrowRight />
         </Button>
 
-        <p className="text-sm text-muted-foreground text-center">
+        <p className="text-sm text-zinc-400 text-center">
           Não tem uma conta?{" "}
           <a
             href="/auth/register"
-            className="text-primary underline-offset-4 hover:underline"
+            className="underline-offset-4 hover:underline text-zinc-50"
           >
             Cadastre-se
           </a>

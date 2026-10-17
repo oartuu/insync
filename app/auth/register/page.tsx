@@ -51,14 +51,14 @@ function page() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-zinc-900">
-      <div className="flex flex-col gap-2 bg-zinc-200 w-2/3 p-4 rounded-xl">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-dark-background">
+      <div className="flex flex-col gap-2 text-zinc-50 w-2/3 p-4 rounded-xl bg-card-background">
         <h1 className="text-2xl font-bold">Cadastro</h1>
 
         <div className="flex flex-col gap-2">
           <label htmlFor="name">Nome *</label>
           <input
-            className="py-2 px-3 border border-gray-300 rounded-md focus:outline-none "
+            className="py-2 px-3 bg-dark-background rounded-xs focus:outline-none placeholder:text-zinc-300"
             type="text"
             {...register("name", { required: true })}
             placeholder="Insira o seu nome"
@@ -72,7 +72,7 @@ function page() {
         <div className="flex flex-col gap-2">
           <label htmlFor="email">Email *</label>
           <input
-            className="py-2 px-3 border border-gray-300 rounded-md focus:outline-none "
+            className="py-2 px-3 bg-dark-background rounded-xs focus:outline-none placeholder:text-zinc-300"
             type="email"
             {...register("email", { required: true })}
             placeholder="Insira o seu Email"
@@ -86,7 +86,7 @@ function page() {
         <div className="flex flex-col gap-2">
           <label htmlFor="password">Senha *</label>
           <input
-            className="py-2 px-3 border border-gray-300 rounded-md focus:outline-none "
+            className="py-2 px-3 bg-dark-background rounded-xs focus:outline-none placeholder:text-zinc-300"
             type="password"
             {...register("password", { required: true })}
             placeholder="Insira o sua Senha"
@@ -100,7 +100,7 @@ function page() {
         <div className="flex flex-col gap-2">
           <label htmlFor="confirmPassword">Confirmar senha *</label>
           <input
-            className="py-2 px-3 border border-gray-300 rounded-md focus:outline-none "
+            className="py-2 px-3 bg-dark-background rounded-xs focus:outline-none placeholder:text-zinc-300"
             type="password"
             {...register("confirmPassword", { required: true })}
             placeholder="Insira o sua Senha"
@@ -114,7 +114,7 @@ function page() {
         <div className="flex flex-col gap-2">
           <label htmlFor="phone">Telefone *</label>
           <input
-            className="py-2 px-3 border border-gray-300 rounded-md focus:outline-none "
+            className="py-2 px-3 bg-dark-background rounded-xs focus:outline-none placeholder:text-zinc-300"
             type="text"
             {...register("phone", { required: true })}
             placeholder="Insira o seu Telefone"
@@ -128,18 +128,18 @@ function page() {
 
         <Button
           onClick={handleSubmit(onSubmit)}
-          className="justify-between mt-3"
+          className="justify-between bg-brand hover:bg-brand/60 transition-all  mt-3"
           variant="default"
           size="lg"
         >
           Criar Conta <ArrowRight />
         </Button>
 
-        <p className="text-sm text-muted-foreground text-center">
+        <p className="text-sm text-zinc-400 text-center">
           Já tem uma conta?{" "}
           <a
             href="/auth/login"
-            className="text-primary underline-offset-4 hover:underline"
+            className="text-zinc-50 underline-offset-4 hover:underline"
           >
             Faça login
           </a>
