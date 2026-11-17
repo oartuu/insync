@@ -267,7 +267,7 @@ export default function Home({ params }: PageProps) {
             </div>
 
             {group.members.map((member) => (
-              <Item className="bg-card-background text-zinc-50">
+              <Item key={member.id} className="bg-card-background text-zinc-50">
                 <ItemMedia>
                   <div className="bg-zinc-500/30 py-4 px-5 rounded-md text-zinc-50 uppercase font-bold">
                     {member.user.name.charAt(0)}
@@ -292,7 +292,7 @@ export default function Home({ params }: PageProps) {
         </div>
       )}
 
-      <FooterNav />
+      <FooterNav activePage="groups" />
     </div>
   );
 }
