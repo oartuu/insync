@@ -1,6 +1,7 @@
 "use client";
 import EventCard from "@/components/eventCard";
 import FooterNav from "@/components/footerNav";
+import NullEventCard from "@/components/nullEventCard";
 import TopMenu from "@/components/topMenu";
 import { Button } from "@/components/ui/button";
 import {
@@ -96,11 +97,9 @@ export default function Home() {
  
   return (
     <div className="bg-main-background min-h-dvh flex flex-col justify-start">
-      
-    <TopMenu/>
+      <TopMenu />
 
-
-      <div className="flex flex-col flex-1">
+      {userData ? (   <div className="flex flex-col flex-1">
         {" "}
         <div className="p-4">
           <h1 className="text-zinc-50 text-2xl font-bold">
@@ -109,7 +108,12 @@ export default function Home() {
           <p className="text-text-red text-sm">
             Pronto para afinar a passagem de som?
           </p>
-          <EventCard nextEvent={userData?.nextEvent[0]} />
+
+          {userData!.nextEvent.length > 0 ? (
+            <EventCard nextEvent={userData?.nextEvent[0]} />
+          ) : (
+            <NullEventCard />
+          )}
         </div>
         <div className="p-4 flex flex-col gap-4">
           <div>
@@ -285,9 +289,12 @@ export default function Home() {
             </a>
           ))}
         </div>
-      </div>
+      </div> ) : ( <div className="flex flex-1 justify-center items-center text-zinc-50 text-xl font-bold">
+        Carregando...
+      </div>)}
 
       <FooterNav />
     </div>
   );
 }
+

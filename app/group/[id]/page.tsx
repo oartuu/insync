@@ -1,4 +1,7 @@
 "use client";
+import FooterNav from "@/components/footerNav";
+import GroupMenu from "@/components/groupMenu";
+import TopMenu from "@/components/topMenu";
 import { Button } from "@/components/ui/button";
 
 import {
@@ -90,58 +93,15 @@ export default function Home({params}:PageProps) {
 
 
   return (
-    <div className="bg-zinc-900 min-h-dvh flex flex-col justify-start">
-      <div className="bg-red-800 flex justify-between w-full items-center p-3 shadow-2xl">
-        <p className="text-zinc-50 font-extrabold">{group?.name}</p>
+    <div className="bg-main-background min-h-dvh flex flex-col justify-start">
+      <GroupMenu groupName={group?.name} />
 
-        <Dialog>
-          <DialogTrigger
-            render={
-              <Button variant={"secondary"}>
-                Adicionar <Plus />{" "}
-              </Button>
-            }
-          />
+      <div className="flex flex-col flex-1">
 
-          <DialogContent>
-            <DialogHeader>Link de convite:</DialogHeader>
-            <div className="flex flex-col gap-2 p-4 rounded-xl">
-              <div className="flex flex-col gap-2">
-                <input
-                  className="py-2 px-3 border border-gray-300 rounded-md focus:outline-none "
-                  type="text"
-                  readOnly
-                  value={link}
-                />
-              </div>
-
-              <Button
-                onClick={handleCopy}
-                className="justify-between"
-                variant="default"
-                size="lg"
-              >
-                Copiar <Clipboard />
-              </Button>
-            </div>
-          </DialogContent>
-        </Dialog>
+        aaaaaa
       </div>
 
-      <div className="p-4 flex flex-col gap-4">
-        {group?.members.map((m) => (
-          <Item key={m.id} variant="outline" className="border-zinc-700">
-            <ItemContent>
-              <ItemTitle className="text-zinc-50">{m.user.name}</ItemTitle>
-            </ItemContent>
-            <ItemActions>
-              <Button variant="outline" size="sm">
-                Editar
-              </Button>
-            </ItemActions>
-          </Item>
-        ))}
-      </div>
+      <FooterNav/>
     </div>
   );
 }
