@@ -1,9 +1,8 @@
-import { Event } from "@/types/group";
-import { ArrowRight, CalendarPlus, Navigation, Plus, Timer } from "lucide-react";
-import React from "react";
+
+import { ArrowRight, Plus } from "lucide-react";
+
 import { Button } from "./ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTrigger } from "./ui/dialog";
-import { Item, ItemContent, ItemMedia, ItemTitle } from "./ui/item";
 import { useForm } from "react-hook-form";
 
 type Inputs = {
